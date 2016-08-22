@@ -18,10 +18,11 @@ def main(argv):
     #with open('data.txt', 'w') as outfile:
     #    json.dump(apiResult, outfile)
 
-    tagsResults = apiResult['results'][0]['result']['tag']
+    apiResult = apiResult['results'][0]
+    tagsResults = apiResult['result']['tag']
     tagMap = dict()
 
-    # Normalize the data (somewhat) since we receive them as associative arrays
+    # Normalize the data, as it's in parallel arrays
     for tag, conf in zip(tagsResults['classes'], tagsResults['probs']):
         tagMap[tag] = conf
 
