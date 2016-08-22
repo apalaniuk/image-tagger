@@ -4,22 +4,50 @@ import json
 from collections import OrderedDict
 from operator import itemgetter
 from clarifai.client import ClarifaiApi
+from os.path import isfile, join
+
+det 
 
 
 def main(argv):
+    
+    config = {
+        'input_images_dir' : './',
+        'output_dir' : 'output'
+    }
 
     clarifai_api = ClarifaiApi() # assumes environment variables are set.
 
-    with open('data.json') as data_file:    
-        apiResult = json.load(data_file)
+    # Create the output directory
+    if not os.path.exists(settings('output_dir')):
+        os.makedirs(settings('output_dir'))
 
-    #apiResult = clarifai_api.tag_images(open('C:\\images\\Buildings\\45ad67e6.jpg', 'rb'))
+    processImages(config['input_images_dir'])
 
-    #with open('data.txt', 'w') as outfile:
-    #    json.dump(apiResult, outfile)
+processImages(directory):
+    inputDirs = os.walk(directory).dirs
 
-    apiResult = apiResult['results'][0]
-    tagsResults = apiResult['result']['tag']
+    # Loop through all input directories.
+    if inputDirs.length == 0:
+        # Process all images in this leaf directory
+        inputImages = os.walk(directory).filenames
+        inputImages = [ img for img in inputImages if img.endswith('.jpg'')]
+
+        for imageName in inputImages:
+            processImageFake(imageName)
+    else:
+        #Recurse through subdirectory
+        for inputDir in inputDirs:
+            processImages(inputDir)
+
+processImageFake(image):
+    print('Processing ' + image)
+        
+processImage(apiRef):
+    apiResult = clarifai_api.tag_images(open('C:\\images\\Buildings\\45ad67e6.jpg', 'rb'))
+
+    apiResult = apiResult['results'][0]['result']
+    tagsResults = apiResult['tag']
     tagMap = dict()
 
     # Normalize the data, as it's in parallel arrays
